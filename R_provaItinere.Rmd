@@ -1,0 +1,45 @@
+---
+title: "Prova_ItinereR"
+output: html_document
+---
+
+
+## ES 1
+
+
+```{r }
+v <- c(0,1,2,3,4,5,6)
+dim(v)
+```
+## ES 2
+
+What is the result of the following operation?
+
+```{r }
+Inf -Inf
+```
+
+## ES 3
+
+What is the difference between & and && ? 
+
+```{r}
+
+v <- c(25, 11, 34, 2, 11, 5)
+v > 5 & v<30
+v > 5 && v<30
+```
+## ES 4 
+
+Sample only setosa and virginica species
+
+```{r}
+df <- iris[which(iris$Species == "virginica" | iris$Species == "setosa"),]
+```
+
+## ES 5
+
+What is the difference between saplly and lapply?
+
+
+## ES 6
