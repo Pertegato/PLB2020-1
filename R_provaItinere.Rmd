@@ -5,41 +5,89 @@ output: html_document
 
 
 ## ES 1
+Which is the difference between sapply and lapply?
 
+- sapply returns a vector and lapply returns a list
+- sapply returns a list and lapply return a vector 
+- sapply accepts in a vector as input, sapply takes in input only a list
+- sapply can be applied only on a data frame while lapply only on a vector
+- no difference
+  
 
-```{r }
-v <- c(0,1,2,3,4,5,6)
-dim(v)
-```
 ## ES 2
 
-What is the result of the following operation?
+Which is the difference between array and matrix?
 
-```{r }
-Inf -Inf
-```
+- no difference
+- matrix is a 2D vector while array is equal to a vector
+- matrix is a 2D object and array is a multidimensional object
+- matrix is a multidimensional object and array is a 2D object
+- array object doesn't exist in R
+
 
 ## ES 3
 
-What is the difference between & and && ? 
+What is the output of dim(v) where v is a vector?
 
-```{r}
+- 0
+- 1
+- length of the vector
+- [1,length of the vector]
+- NULL
 
-v <- c(25, 11, 34, 2, 11, 5)
-v > 5 & v<30
-v > 5 && v<30
-```
+
 ## ES 4 
 
-Sample only setosa and virginica species
+When would you use ellipsis in a function signature?
+
+- if the function doesn't accept any parameter
+- if you want to pass an indeterminate number of parameters to a function
+- if you want to pass only one indeterminate parameter to the function
+- if you want to pass a max o three inderminate parameters to the function
+- if you want that the function function accepts only a list as parameter
+
+
+
+
+## ES 5
+
+What is the aim of negative indexing in R (immagine to aplly it to a vector)?
+
+- to remove one element from a vector
+- to remove one or more element from a vector
+- allows to take the i position starting from the end of the vector
+- allows to add one or more elements to a vector
+- subset the vector starting form the end to the i position
+
+
+
+
+## ES 6
+Sample setosa and virginica species from iris dataset in only one line
 
 ```{r}
 df <- iris[which(iris$Species == "virginica" | iris$Species == "setosa"),]
 ```
 
-## ES 5
+## ES 7 
 
-What is the difference between saplly and lapply?
+Consider iris dataset, takes only the first two rows of data related to specie setosa and write them on an apporpriate file 
+
+## ES 8
+
+Transform the first string into the second one (Hint: use strsplit() function)
+
+"HelloWorld"
+"H_e_l_l_o_W_o_r_l_d"
 
 
-## ES 6
+## ES 9
+
+  
+
+
+## ES 10
+define a binary operator that computes the sum of the square root of the means of two vectors. Use the following vectors
+
+v1 <- c(25, 11, 34, 2, 17, 5)
+v2 <- c(32, 16, 90, 45, 26 , 15, 3, 7)
