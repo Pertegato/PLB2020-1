@@ -63,9 +63,11 @@ What is the aim of negative indexing in R (immagine to aplly it to a vector)?
 
 
 ## ES 6
-Sample setosa and virginica species from iris dataset in only one line
+Sample setosa and virginica species from iris dataset in only one code line
+
 
 ```{r}
+
 df <- iris[which(iris$Species == "virginica" | iris$Species == "setosa"),]
 ```
 
@@ -81,13 +83,61 @@ Transform the first string into the second one (Hint: use strsplit() function)
 "H_e_l_l_o_W_o_r_l_d"
 
 
+
 ## ES 9
 
-  
-
+Consider the "quakes" dataset which stores locations earthquakes of Fiji island since 1964.
+Print the average earthquake wheigth by the Richter magnitude 
+```{r}
+#tapply
+```
 
 ## ES 10
+
+
+Write a function that takes an arbitrary number of numbers as strings eg: "1", "2", "3" and return their sum (Hint: use as.double())
+
+
+## ES 11
+
 define a binary operator that computes the sum of the square root of the means of two vectors. Use the following vectors
 
 v1 <- c(25, 11, 34, 2, 17, 5)
 v2 <- c(32, 16, 90, 45, 26 , 15, 3, 7)
+
+
+
+
+## ES 12
+Transform the following list into a data frame. If the columns have different lengths, fill them with NA.
+
+```{r}
+list(A = c(1:10), name= c("Luca", "Enza", "Mario", "Paola", "Martina"), B = c(rep("treated", 5), rep("untreated",5), drug = c(rep("aspirin",5))))
+
+```
+
+## ES 13  
+
+Consider the data frame created in the preavious exercise, write a function to move the columns in even position in the rows at odd position and vice-versa. Change also rownames and colnames accordingly.
+
+
+## ES 14
+
+Create two matrices of dimensions 2x3 and 4x2, concatenate them by row, rename the columns using letters in even positions of the alphabet and rename the rows using the letters in the odd positions of the alphabet (which letters you want using LETTERS dataset).
+Plot the first column values against the second column values.
+
+## ES 15 
+
+Given the two following data frames df1 and df2, take only the rows of them sharing the same rownames (Hint: use intersect()) and create a new data frame called df3 in which for each element you have the concatenation of the columns in df1 and df2. Create a binomial distribution using rbinom() using the data in df3 ( prob, the observation vector and the sum of size).
+Finally print how many times each sample is sampled by rbinom(). 
+
+```{r}
+df1 <- data.frame(A = c("C",1, 0.1, 3), B= c("F",1, 0.05, 7), C = c("S",1, 0.2, 2), D =c("H", 1, 0.05, 4), E = c("Z", 1, 0.1, 5),
+                  row.names = c("sample", "size", "prob", "observations"))
+
+df2 <- data.frame(F= c(0.05, "Y", 1, 2.5, 3), G=c(0.1, "M", 1, 4.0, 4), H=c(0.1, "N", 1, 2.0, 6), I=c(0.05, "I", 1, 2.0, 5), 
+                  L=c(0.2, "R", 1, 3.0, 8), row.names=c("prob","subject", "size", "measure", "observations"))
+
+
+
+```
