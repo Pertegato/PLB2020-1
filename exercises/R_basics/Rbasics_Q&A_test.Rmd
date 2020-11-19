@@ -5,11 +5,6 @@ date: "11/19/2020"
 output: html_document
 ---
 
----
-title: "Prova_ItinereR"
-output: html_document
----
-
 
 ## EX 1
 Which is the difference between sapply and lapply?
