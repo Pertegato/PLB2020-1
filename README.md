@@ -18,3 +18,4 @@ The following contents are available in ```lectures_materials_and_slides``` dire
 ## Exercises
 The assignments are available in the ```exercises``` directory:
 1. Basics of R programming - two sets of exercises (in ```exercises/R_basics```)
+2. Unix Bash programming - jupyter notebook containing exercises on bash (in ```exercises/Bash```)
