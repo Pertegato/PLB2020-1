@@ -7,7 +7,7 @@ This repository contains:
 - exercises
 
 ### News
-!!! Deadline for R basics exercises submission moved to November 11th 2020 11:00pm (CET) !!!
+!!! Bash exercises and lecture material will be uploaded soon !!!
 
 ## Course contents
 The following contents are available in ```lectures_materials_and_slides``` directory:
