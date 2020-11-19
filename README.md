@@ -13,6 +13,7 @@ This repository contains:
 The following contents are available in ```lectures_materials_and_slides``` directory:
 1. Introduction to the course, introduction to Github and R markdown language
 2. Basics of R programming
+3. Unix Bash programming
 
 ## Exercises
 The assignments are available in the ```exercises``` directory:
