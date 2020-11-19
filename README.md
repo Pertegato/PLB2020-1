@@ -7,7 +7,7 @@ This repository contains:
 - exercises
 
 ### News
-!!! Bash exercises and lecture material will be uploaded soon !!!
+!!! Bioconductor exercises and lecture material will be uploaded soon !!!
 
 ## Course contents
 The following contents are available in ```lectures_materials_and_slides``` directory:
