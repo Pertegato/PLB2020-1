@@ -1,0 +1,249 @@
+---
+title: "Esercizi 1-21"
+author: "Pertegato"
+date: "9/10/2020"
+output: html_document
+---
+# Exercise 1
+# Create a directory "exercisesR". Inside the folder create another
+# directory named "Es" and set it as working directory for R
+
+```{r }
+getwd()
+setwd("~/Scrivania/Programming laboratory for bioinformatics/exerciseR/Es")
+require("knitr")
+opts_knit$set(root.dir = "~/crivania/Programming laboratory for bioinformatics/exerciseR/Es")
+getwd()
+
+```
+# Exercise 2
+# Open a help window for the mean function
+```{r }
+help(mean)
+
+```
+# Exercise 3
+# Execute the operation sqrt(2*10 + 5), put the result in the variable x and print it to the screen.
+```{r }
+x<-sqrt(2*10 + 5)
+x
+
+```
+# Exercise 4
+# Define a vector v1 = (1,2,3,4,5), v2 = (23,13,1,33,2). Calculate the vector v3 = v1 + v2. Execute the 
+# log10 of each element of v3 and put the result in v4. Print the square of each element of v4 
+```{r }
+v1<-c(1,2,3,4,5)
+v2<-c(23,13,1,33,2)
+v3=v1 + v2
+v4<-log10(v3)
+sqrt(v4)
+```
+# Exercise 5
+# Print the sum of the squares of the first ten numbers using sequences. 
+# Hint: the function sum(v) calculate the sum of the elements of the vector v.
+```{r }
+r<- 1:10
+sum(sqrt(r))
+```
+# Exercise 6
+# Print the sum of the first ten even numbers.
+```{r }
+(seq(2, 20, by=2))
+
+```
+
+# Exercise 7
+# Create a vector v with ten numbers in the range (1,100). Print how many numbers are
+# greater than 50.
+# Hint: Use the function sum.
+```{r }
+v<- sample(seq(1, 100), 10)
+v
+my_na <-  v>50
+my_na
+sum(my_na)
+
+```
+
+# Exercise 8
+# Define the following vector: v <- c(NA, NA, NA, NA, 1:100). Create a vector v2 from v with elements greater than 50
+# but lower than 80. Exclude NA values.
+```{r }
+v <- c(NA, NA, NA, NA, 1:100)
+v2<- v[v>50 & v<80 & !is.na(v)]
+v2
+
+```
+
+# Exercise 9
+# Define a vector v with elements from 1 to 20. Create a vector v2 with the odd elements of v.
+# Assign to v2 a names vector with the letters of even position (from variable LETTERS). Print v2. 
+# Use the negative indexing.
+```{r }
+v <- c(1:20)
+v2 <- v[-c(seq(2, 22, by=2))]
+names(v2) <- LETTERS[seq(1, by=2, length = length(v)/2)]
+v2
+```
+
+
+
+# Exercise 10
+# Build a factor of 25 elements (strings) formed by 3 different levels
+```{r }
+f <- factor(rep(c("A","C","G"),c(5,10,10)))
+f
+```
+
+# Exercise 11
+# Which data structures could be used to model a data set with a set of patients
+# healthy and sick, subjected to 5 different types of clinical analysis?
+
+data frame
+
+
+
+# Exercise 12
+# Create a list l with the following elements:
+#   - a vector named seq with the first 10 numbers
+#   - a vector named letters with the first 10 letters from LETTERS
+#   - a vector named bool with some boolean values
+
+# Print the length of l
+# Print the elements of the vector "seq" using its name and its numerical index
+# Print the second element of vector letters
+# Add to l, as last element, the string "last"
+```{r }
+l<- list(seq=seq(10),letters=letters[seq( from = 1, to = 10 )],bool=logical(length = 7))
+lenght<-length(l)
+l[1]
+l$seq
+letters[2]
+lenght
+
+l <- c(l,"last")
+l
+```
+
+
+# Exercise 13
+# Given the list li <- list(m = matrix(rnorm(64), nrow = 8), s = c(rep("T", 3), rep("G", 5))) 
+# - extract the second column of the matrix
+# - the "G"s of the vector s
+# Add to the list a vector of 10 random numbers.
+# Access in 3 different ways to the second component of the list
+# What is the difference between li[1] and li[[1]]?
+# With the function diag, print the diagonal of the matrix of li
+```{r }
+li <- list(m = matrix(rnorm(64), nrow = 8), s = c(rep("T",3), rep("G",5)))
+li[[1]][,2]
+li[[2]][4:8]
+li$vector = runif(10)
+li$s
+li[2]
+li["s"]
+#‘[[...]]’ is the operator used to select a single element, whereas ‘[...]’ is a general subscripting operator.
+diag(li[[1]])
+```
+
+# Exercise 14
+# Define a 5x5 matrix m formed by the numbers from 1 to 25. Assign names to columns and rows with the first 5 letters. 
+# Create a new matrix m2, that is m without column 1 and 3 but a last column with all one named 'O'.
+```{r }
+m <- matrix((1:25), nrow = 5)
+rownames(m) <- LETTERS[1:5]
+colnames(m) <- LETTERS[1:5]
+m2 <- m[,-c(1,3)]
+m2 <- cbind(m2,1)
+
+```
+
+# Exercise 15
+# Define a 5x5 matrix m with all one
+# Define a 5x2 matrix m2 with the first 10 numbers.
+# Put in m3 the result of matrix multiplication m*m2.
+# Use %*% to multiply matrices
+# Put m, m2 and m3 in a list l
+# Print l
+
+```{r }
+m1 <- matrix(1, nrow = 5, ncol =5)
+m2 <- matrix(1:10, nrow = 5, ncol = 2)
+m3 <- m1 %*% m2
+l <- list(m1,m2,m3)
+l
+```
+# Exercise 16
+# Create a 4x4 matrix m with the first 16 letters. Fill the matrix by rows.  
+# Define a matrix m2 with all columns of m except the third
+# Define a vector v with 4 arbitrary strings
+# Create a matrix m3 which is the concatenation of m and v by columns
+```{r }
+m <- matrix(LETTERS[1:16], nrow = 4, ncol = 4, byrow = TRUE)
+m2 <- m[,-3]
+v <- c("ciao", "hi", "hello", "hola")
+m3 <- cbind(m,v)
+m3
+
+```
+
+# Exercise 17
+# Build 2 matrices M and N with 5 columns. Build (if possible) with rbind a matrix with
+# 5 columns and as rows, the rows of M and N. Is it possible build a matrix from M and N
+# using cbind?
+
+```{r }
+M <- matrix(1, ncol = 5)
+N <- matrix(2, ncol=5)
+R <- rbind(M,N)
+C <- cbind(M,N)
+#yes, the result is a matrix with one row and ten columns
+
+```
+
+# Exercise 18
+# Given 2 square matrices A and B (3x3) formed by random numbers, compute their element-wise
+# product and their rows times columns product. Define a vector b with 3 elements and solve
+# (function "solve") the linear system Ax = b.
+```{r }
+a <- matrix(runif(9),3,3)
+b <- matrix(runif(9),3,3)
+x1<-a*b
+x2<- a %*% b
+b1<-c(2,4,7)
+j<-solve(a,b1)
+
+```
+
+# Exercise 19
+# Build a 10x10 matrix composed by random numbers using at least two different ways.
+# Use the functions matrix and array
+```{r }
+z<-matrix(runif(100), nrow = 10, ncol = 10)
+z1<-array(runif(100), c(10,10))
+
+```
+
+# Exercise 20
+# Build 2 matrices x (3x4) and y (5x3) of characters. Change the matrix x with a unique
+# assignment in order to replace its first two columns with the last two rows of y
+```{r }
+x <- matrix("a", nrow = 3, ncol = 4)
+y <- matrix("b", nrow = 5, ncol = 3)
+x[,c(1,2)] <- t(y[c(4,5),])
+
+```
+
+# Exercise 21
+# Build a 3x4x5 array formed by the first 60 positive natural numbers. Multiply a with
+# an array with the same dimensions caracterized by random numbers. Is it possible
+# multiply "a" with a vector with 60 numbers? If yes, what do you get?
+# Modify "a" in order to obtain an array 4-D of dimensions 3x5x2x2. 
+```{r }
+a <- array(1:60, c(3,4,5))
+d<-a * array(runif(60), c(3,4,5))
+#Yes, we get a matrix of 3x4x5 composed by element-wise product of the two matrices
+a <- array(a, c(3,5,2,2))
+d
+```

@@ -1,0 +1,1019 @@
+---
+title: "esercizi"
+author: "Pertegato"
+date: "4/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+title: "esercizi22-78"
+author: "Pertegato"
+date: "2/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exercise 22
+# Create a data frame df from an arbitrary 5x5 matrix.
+# Add to df a factor with levels "1" and "0".
+```{r }
+df <- data.frame(matrix(runif(25), 5, 5))
+df <- data.frame(df, f=factor(rep(c(0,1), c(5,5))))
+
+
+```
+
+# Exercise 23
+# Create a data frame df using three vectors and 1 factor (lengths > 5)
+# Create a data frame df2 that is a subset of df binded with a 4x4 matrix
+```{r }
+df <- data.frame(v1=runif(10), v2=runif(10), v3=runif(10), f = factor(rep(c(0,1), c(5,5))))
+df2 <- df[1:4,1:4]
+df2
+```
+
+# Exercise 24
+# Create a data frame df using a list containing 2 matrices with a 
+# different number of columns  
+```{r }
+df <- data.frame(matrix(runif(25), 5, 5), matrix(runif(20),5,4))
+df
+```
+
+# Exercise 25
+# Create a data frame containing the data frame of the previous exercise plus a vector
+# Extract one of the columns in three ways
+```{r }
+df1 <- data.frame(df,v1=runif(10))
+df1["X1"]
+df1[[1]]
+df1[,1]
+```
+
+# Exercise 26
+# Print the following attributes of the iris dataset:
+# - class
+# - dimensions
+# - number of rows
+# - number of columns
+# - space occupied by the dataset
+# - names attribute
+```{r }
+class(iris)
+dim(iris)
+nrow(iris)
+ncol(iris)
+object.size(iris)
+names(iris)
+```
+
+
+# Exercise 27 - Summary - Objects in R
+# Define a vector v with the following numbers: 27, 22, 23, 19, 21, 30 
+# Print v
+# Print the dimensions of v
+# Print the length of v
+# Print the class of v
+# Assign to v the dimension (2,3)
+# Print v
+# Print the dimensions of v
+# Print the class of v
+# Assign to v the dimension NULL
+# Define a factor s with the values: "M", "F", "M", "F", "F", "F"
+# Print s
+# Define a vector p with the strings: "Marco", "Monica", "Simone", "Giuliana", "Maria", "Marta"
+# Print the class of p
+# Use cbind to create a matrix M with columns p, v and s
+# Print the class of each column of M
+# Define a list l with the elements p, v and s
+# Assign to l the names "Name", "Age" and "Gender"
+# Print l
+# Create a data frame using the list l
+# Print the class of df
+# Print df
+# Print the class of each column of df
+```{r }
+v <- c(27,22,23,19,21,30)
+v
+dim(v)
+length(v)
+class(v)
+v <- dim(c(2,3))
+v
+dim(v)
+class(v)
+v <- dim(NULL)
+s <- factor(c(rep("M",1),rep("F",1),rep("M",1),rep("F",3)))
+s
+p <- c("Marco", "Monica", "Simone", "Giuliana", "Maria", "Marta")
+class(p)
+v <- c(27,22,23,19,21,30)
+m <- cbind(p,v,s)
+class(m[,1])
+class(m[,2])
+class(m[,3])
+l <- list(p,v,s)
+names(l) <- c("Name", "Age", "Gender")
+l
+df <- data.frame(l)
+class(df)
+df
+class(df[[1]])
+class(df[[2]])
+class(df[[3]])
+
+```
+
+# Exercise 28
+# Define a vector v with 20 numbers between 1 and 100
+# Using a for loop, iterate over v and put in s the sum of the numbers greater than 50
+```{r }
+v <- runif(20,1,100)
+s <- 0
+for(i in v){
+  if(i > 50){
+    s = (s+i)
+  }
+}
+s
+```
+
+# Exercise 29
+# Define a 10x10 matrix m
+# Iterate over m and set each element m[i,j] based on these rules:
+# - if i != j then  m[i,j] = i*j
+# - otherwise       m[i,j] = 1
+```{r }
+m <- matrix(runif(100),10,10)
+m1 <- matrix(1,nrow(m), ncol(m))
+for(i in seq_len(nrow(m))){
+  for(j in seq_len(ncol(m))){
+    if(i != j){
+      m1[i,j] <- (m[i,j] = i*j)
+    }else{
+      m1[i,j] <- (m[i,j] = 1)
+    }
+  }
+}
+m1
+```
+
+# Exercise 30
+# Define a 5x5 matrix m1 with numbers between 1 and 10 and a 5x2 matrix m2 with numbers from 1 to 10
+# Using for loops calculate the matrix multiplication m1*m2. Put the result in m3
+```{r }
+m1 <- matrix(runif(1,10,25),5,5)
+m2 <- matrix(runif(1,10,10),5,2)
+m3 <- matrix(1,nrow(m1),ncol(m2))
+
+for(i in nrow(m3)){
+  for(j in ncol(m3)){
+    m3[i,j] <- sum(m1[i,] * m2[,j])
+  }
+}
+m3
+```
+
+# Exercise 31
+# You're about to write your first function! Just like you would assign a value 
+# to a variable with the assignment operator, you assign functions in the following
+# way:
+#
+# function_name <- function(arg1, arg2){
+#	# Manipulate arguments in some way
+#	# Return a value
+# }
+#
+# The "variable name" you assign will become the name of your function. arg1 and
+# arg2 represent the arguments of your function. You can manipulate the arguments
+# you specify within the function. After sourcing the function, you can use the 
+# function by typing:
+# 
+# function_name(value1, value2)
+#
+# Below we will create a function called boring_function. This function takes
+# the argument `x` as input, and returns the value of x without modifying it.
+# Delete the pound sign in front of the x to make the function work! Be sure to 
+# save this script and type submit() in the console after you make your changes.
+
+boring_function <- function(x) {
+  x
+}
+
+```{r }
+boring_function <- function(x) {
+  x
+}
+```
+
+# Exercise 32
+#Implement the function my_mean
+# You're free to implement the function my_mean however you want, as long as it
+# returns the average of all of the numbers in `my_vector`.
+#
+# Hint #1: sum() returns the sum of a vector.
+# 	Ex: sum(c(1, 2, 3)) evaluates to 6
+#
+# Hint #2: length() returns the size of a vector.
+# 	Ex: length(c(1, 2, 3)) evaluates to 3
+#
+# Hint #3: The mean of all the numbers in a vector is equal to the sum of all of
+#		   the numbers in the vector divided by the size of the vector.
+#
+# Note for those of you feeling super clever: Please do not use the mean()
+# function while writing this function!!!!!!
+
+```{r }
+myMean <- function(x) {
+  sum(x) / length(x)
+}
+```
+
+# Exercise 33
+# You're going to write a function called "remainder." remainder() will take
+# two arguments: "num" and "divisor" where "num" is divided by "divisor" and
+# the remainder is returned. Imagine that you usually want to know the remainder
+# when you divide by 2, so set the default value of "divisor" to 2. Please be
+# sure that "num" is the first argument and "divisor" is the second argument.
+#
+# Hint #1: You can use the modulus operator %% to find the remainder.
+#   Ex: 7 %% 4 evaluates to 3. 
+#
+# Remember to set appropriate default values!
+
+remainder <- function(num, divisor) {
+  num%%divisor
+}
+
+```{r }
+remainder <- function(num, divisor) {
+  num%%divisor
+}
+```
+
+# Exercise 34
+# You can pass functions as arguments to other functions just like you can pass
+# data to functions. Let's say you define the following functions:
+#
+# add_two_numbers <- function(num1, num2){
+#    num1 + num2
+# }
+#
+# multiply_two_numbers <- function(num1, num2){
+#	num1 * num2
+# }
+#
+# some_function <- function(func){
+#    func(2, 4)
+# }
+#
+# As you can see we use the argument name "func" like a function inside of 
+# "some_function()." By passing functions as arguments 
+# some_function(add_two_numbers) willi evaluate to 6, while
+# some_function(multiply_two_numbers) will evaluate to 8.
+# 
+# Finish the function definition below so that if a function is passed into the
+# "func" argument and some data (like a vector) is passed into the dat argument
+# the evaluate() function will return the result of dat being passed as an
+# argument to func.
+#
+# Hints: This exercise is a little tricky so I'll provide a few example of how
+# evaluate() should act:
+#    1. evaluate(sum, c(2, 4, 6)) should evaluate to 12
+#    2. evaluate(median, c(7, 40, 9)) should evaluate to 9
+#    3. evaluate(floor, 11.1) should evaluate to 11
+
+
+```{r }
+evaluate <- function(func){
+  func(c(2,4,6))
+}
+evaluate(sum)
+
+evaluate1 <- function(func){
+  func(c(7,40,9))
+}
+evaluate1(median)
+evaluate <- function(func){
+  func(11.1)
+}
+evaluate(floor)
+```
+
+# Exercise 35
+# The syntax for creating new binary operators in R is unlike anything else in
+# R, but it allows you to define a new syntax for your function. I would only
+# recommend making your own binary operator if you plan on using it often!
+#
+# User-defined binary operators have the following syntax:
+#      %[whatever]% 
+# where [whatever] represents any valid variable name.
+# 
+# Let's say I wanted to define a binary operator that multiplied two numbers and
+# then added one to the product. An implementation of that operator is below:
+#
+# "%mult_add_one%" <- function(left, right){ # Notice the quotation marks!
+#   left * right + 1
+# }
+#
+# I could then use this binary operator like `4 %mult_add_one% 5` which would
+# evaluate to 21.
+#
+# Write your own binary operator below from absolute scratch! Your binary
+# operator must be called %p% so that the expression:
+#
+#       "Good" %p% "job!"
+#
+# will evaluate to: "Good job!"
+
+"%p%" <- function(p1,p2){ # Remember to add arguments!
+ paste(p1,p2)
+}
+
+#You made your own binary operator! Let's test it out. Paste together the strings: 'I', 'love', 'R!'
+#| using your new binary operator.
+
+#> "I" %p% "love" %p% "R!"
+#[1] "I love R!"
+```{r }
+"%p%" <- function(p1,p2){ # Remember to add arguments!
+ paste(p1,p2)
+}
+"I" %p% "love" %p% "R!"
+
+```
+# Exercise 36
+# Define a function even_count that takes in input a vector v and return the number of even elements of it.
+```{r }
+even_count <- function(v){
+  sum(v[v%%2 == 0])
+}
+
+```
+
+# Exercise 37
+# Define a function m_create that takes 2 vectors v1, v2 and a variable n (by default = 10) that returns a matrix with n columns, 
+# where each column is the concatenation of v1 and v2
+```{r }
+m_create <- function(v1,v2,n){
+  matrix(rep(cbind(v1,v2),10),ncol = n)
+}
+```
+
+# Exercise 38
+# The ellipses can be used to pass on arguments to other functions that are
+# used within the function you're writing. Usually a function that has the
+# ellipses as an argument has the ellipses as the last argument. The usage of
+# such a function would look like:
+#
+# ellipses_func(arg1, arg2 = TRUE, ...)
+#
+# In the above example arg1 has no default value, so a value must be provided
+# for arg1. arg2 has a default value, and other arguments can come after arg2
+# depending on how they're defined in the ellipses_func() documentation.
+# Interestingly the usage for the paste function is as follows:
+#
+# paste (..., sep = " ", collapse = NULL)
+#
+# Notice that the ellipses is the first argument, and all other arguments after
+# the ellipses have default values. This is a strict rule in R programming: all
+# arguments after an ellipses must have default values. Take a look at the
+# simon_says function below:
+#
+# simon_says <- function(...){
+#   paste("Simon says:", ...)
+# }
+#
+# The simon_says function works just like the paste function, except the
+# begining of every string is prepended by the string "Simon says:"
+#
+# Telegrams used to be peppered with the words START and STOP in order to
+# demarcate the beginning and end of sentences. Write a function below called 
+# telegram that formats sentences for telegrams.
+# For example the expression `telegram("Good", "morning")` should evaluate to:
+# "START Good morning STOP"
+```{r }
+telegram <- function(...){
+  paste("START",..., "STOP")
+  
+}
+
+```
+
+# Exercise 39
+# Let's explore how to "unpack" arguments from an ellipses when you use the
+# ellipses as an argument in a function. Below I have an example function that
+# is supposed to add two explicitly named arguments called alpha and beta.
+# 
+# add_alpha_and_beta <- function(...){
+#   # First we must capture the ellipsis inside of a list
+#   # and then assign the list to a variable. Let's name this
+#   # variable `args`.
+#
+#   args <- list(...)
+#
+#   # We're now going to assume that there are two named arguments within args
+#   # with the names `alpha` and `beta.` We can extract named arguments from
+#   # the args list by using the name of the argument and double brackets. The
+#   # `args` variable is just a regular list after all!
+#   
+#   alpha <- args[["alpha"]]
+#   beta  <- args[["beta"]]
+#
+#   # Then we return the sum of alpha and beta.
+#
+#   alpha + beta 
+# }
+#
+# Have you ever played Mad Libs before? The function below will construct a
+# sentence from parts of speech that you provide as arguments. We'll write most
+# of the function, but you'll need to unpack the appropriate arguments from the
+# ellipses.
+
+mad_libs <- function(...){
+  # Do your argument unpacking here!
+
+  # Don't modify any code below this comment.
+  # Notice the variables you'll need to create in order for the code below to
+  # be functional!
+  paste("News from", place, "today where", adjective, "students took to the streets in protest of the new", noun, "being installed on campus.")
+}
+```{r }
+mad_libs <- function(...){
+  args<-list(...)
+  place <- args[["place"]]
+   adjective <- args[["adjective"]]
+   noun <- args[["noun"]]
+   
+  paste("News from", place, "today where", adjective, "students took to the streets in protest of the new", noun, "being installed on campus.") 
+   
+}
+mad_libs(place='New Zealand', adjective='beautiful', noun='landscape')
+```
+
+# Exercise 40
+# Define a function sum_vector that takes in input a undetermined number of vectors and returns a
+# the sum of all elements. NA values on vectors must be ignored
+# Use ellipsis function
+```{r }
+sum_vector <- function(...){
+  args <- list(...)
+  for(v in list){
+    x <- x + sum(v , na.rm = TRUE)
+  }
+}
+```
+
+# Exercise 41
+# Define a matrix_by_row function, with the same parameters of function "matrix()", 
+# which fills the matrix by rows.
+# Use ellipsis function
+```{r }
+matrix_by_row <- function(...){
+  rbind(...)
+}
+
+```
+
+# Exercise 42
+# Dataset mtcars
+# Show the number of cars by the number of cylinders (cyl)
+# Show th average consumption (mpg) by the number of cylinders (cyl)
+# Use only one instruction
+```{r }
+length(mtcars$cyl)
+sum(mtcars$mpg) / length(mtcars$cyl)
+```
+
+# Exercise 43
+# Visualize the first rows of the dataset iris
+# Define a function iris_mean that takes as parameter a type of iris specie and returns
+# a vector of the means of each column of that specie
+# Use the function sapply
+# Apply the previous function to all species
+# Use for loop
+```{r }
+head(iris, n=1)
+iris_mean <- function(type){
+  
+    sapply(iris[iris$Species == type, ][,1:4], mean)
+}
+iris_mean("setosa")
+```
+
+# Exercise 44
+# Define a function "between" that takes as parameter: v, p and q. The function returns
+# the number of elements of v that are between the values p and q (included).
+# Define the following list: l <- list(c(23,232,112,2), c(23,33,33,22,32), c(12,34,65,67)).
+# Apply the function between to l to obtain a vector of results
+# Apply the function between to l to obtain a list of results
+```{r }
+between <- function(v,p,q){
+  res <- c()
+  t <- c(p,q)
+  min <- min(t)
+  max <- max(t)
+  
+  for(e in v){
+    if(e >= min & e <= max){
+      res <- c(res,e)
+      
+    }
+  }
+  return(res)
+}
+l <- list(c(23,232,112,2), c(23,33,33,22,32), c(12,34,65,67))
+v1<- l[[2]]
+between(v1,10,48)
+
+
+```
+
+# Exercise 45
+# Create a data frame df with 4 columns. The first with a sample of 20 numbers between 1 and 100,
+# the second with the value TRUE if the corresponding element is even (FALSE otherwise), the third with 
+# the cube of the x elements. The names of the columns are: x, even, square and cube
+# Write the first 10 rows of df (with the function write.table) in a file "powers1.csv". Each element of a row 
+# must be separated with a ",". Hold the column names but not the row names.
+# Write the last 10 rows of df (with the function write.csv) in a file "powers2.csv".
+# Don't hold the row names.
+# Merge the contents of files "powers1.csv" and "powers2.csv" in a file "powers3.csv".
+# Use the function "read.table" or "read.csv"
+```{r }
+x <- sample(1:100,20)
+even <- (x%%2 == 0)
+df <- data.frame(x, even, square = x^2, cube = x^3)
+names(df) <- c("x","even","square", "cube")
+write.table(head(df,10), file = "powers1.csv", sep = ",", row.names = FALSE, col.names = TRUE)
+write.csv(tail(df,10), file = "powers2.csv", row.names = FALSE)
+write.csv(merge(head(df,10),tail(df,10)), file = "powers3.csv", row.names = FALSE)
+read.table("powers1.csv", sep = ",")
+read.csv("powers2.csv")
+read.csv("powers3.csv")
+```
+
+# Exercise 46
+# Use "read.table" to read data from the link "http://data.princeton.edu/wws509/datasets/effort.dat" with following:
+# - "a", "b", "c" as columns names
+# - number from 1 to 10 as row names
+# - rows from 3 to 12
+```{r }
+read.table(file = "http://data.princeton.edu/wws509/datasets/effort.dat", col.names = c("a","b","c"), row.names =NULL ,nrows = 10, skip=2)
+```
+
+# Exercise 47
+# Read the first 10 lines of the html page "http://www.r-project.org" in the variable x
+# Print the class of x
+# Put the elements of x with odd position in y
+# Write the elements of y in a file "y_output.txt"
+```{r }
+x <- read.table(file ="http://www.r-project.org",sep = "\n", blank.lines.skip = TRUE)
+x <- head(x,10)
+class(x)
+y <- x[x%%2 != 0]
+s<-write.table(y, file = "y_output.txt", row.names = FALSE)
+```
+
+
+#Exercise 48
+#Create two numeric vectors x and y of length 3 and 5 respectively. 
+#What happens when you execute their product?
+```{r }
+x <- c(1,2,4)
+y <- c(3,5,6,7,3)
+x*y # recycling; the longer vector is not a multiple of the shorter one
+```
+
+#Exercise 49
+#(a) Check if the current file is present in your current directory.
+#(b) Then, choose another file from your current directory and get some informatin about it. 
+#Do point (b) it in a single command.
+```{r }
+file.exists("C:/home/luca/Scrivania/Programming-laboratory-for-bioinformatics/esercizi 22-78.Rmd")
+
+file.info("C:/home/luca/Scrivania/Programming-laboratory-for-bioinformatics/esercizi 22-78.Rmd")
+```
+
+#Exercise 50
+#Write down the R code required to produce the following:
+#(a) [1] 1 5 1 5 1 5 1 5 1 5 1 5 1 5 1 5 1 5 1 5 1 5 1 5 1 4 7 10 13 16 19
+#(b) [1] 2 4 6 2 4 6 1 1 1 3 3 5 5 5 5
+```{r }
+c(rep(c(1,5),12), seq(1,19, by=3))
+c(rep(c(2,4,6),2), rep(1,3), rep(3,2), rep(5,4))
+```
+
+#Exercise 51
+#Calculate the sum of i^2 for i=3:177
+```{r }
+sum((3:177)^2)
+```
+
+#Exercise 52
+#Use paste to obtain the following
+#[1] "Ab-Bc-Cd-De-Ef-Fg-Gh-Hi-Ij-Jk-Kl-Lm-Mn-No-Op-Pq-Qr-Rs-St-Tu-Uv-Vw-Wx-Xy-Yz-Za"
+#What is the difference between the parameters sep and collapse?
+```{r }
+paste(LETTERS, c(letters[-1],letters[1]), collapse = "-", sep = "")
+# sep sta tra due elementi della stessa coppia e collapse sta tra ogni coppia
+```
+
+#Exercise 53
+#Sample 50 values from x<-rep(NA,300) and y<-1:300 and put the result in a vector z
+#Find the proportion of NAs in z in a single command.
+```{r }
+x <- rep(NA,300)
+y <- 1:300
+z <- c(sample(c(x,y),50))
+sum(is.na(z)/length(z))
+```
+
+#Exercise 54
+#Consider the vector z of the previous exercise. Modify it such that it contains only values greater than -50 
+#but lower than 100(in a single command). NA values must be kept.
+#What should be added in order to remove NA values?
+```{r }
+z <- z[z > -50 & z < 100]
+z <- z[!is.na(z)]
+
+```
+
+#Exercise 55
+#Create a vector x with named elements. Obtain the first element using three different ways. 
+#Then modify x such that it does not contain the third element anymore. Do it by using names.
+```{r }
+x <- c(4,5,6)
+names(x) <- c("A","B", "C")
+x["A"]
+x[[1]]
+x[1]
+x <- x[names(x) != 'C']
+x
+```
+
+#Exercise 56
+#Create a factor f containing the following levels: "BD Student" "MD Student". The repetitions should be 4 and 5 
+#respectively.
+#Then add a new level "PhD Student" for which the repetitions are still 0.
+```{r }
+f <- factor(rep(c("BD Student", "MD Student"), c(4,5)))
+levels(f) <- c(levels(f), "PhD Student")
+```
+
+#Exercise 57
+#Create a list l composed by the two following lists: 
+l1<-list(name=c("Alberto","Antonio"),age=c(25,40),work=c("Student","Engineer"))
+l2<-list(surname=c("Rossi","Bianchi"),nation=c("Italy","Malta"))
+#(a)What happens if you use list to create l?
+#(b)What happens when you type l$n and why? What should you type in order to obtain the nation component?
+```{r }
+l1<-list(name=c("Alberto","Antonio"),age=c(25,40),work=c("Student","Engineer"))
+l2<-list(surname=c("Rossi","Bianchi"),nation=c("Italy","Malta"))
+l3 <- list(l1,l2) #hai una lista che ha come elementi 2 liste
+l$nation #we obtain null
+l2[2]$nation
+```
+
+#Exercise 58
+#Create a numeric matrix m 4x5.
+#(a) Bind to m a numeric 4x2 matrix called n. Do both cbind and rbind work? If no, why?
+#(b) Remove from the newly obtained m, the central column. Do this by exploiting the ncol function.
+#(c) Multiply the new m matrix by n to obtain the row by columns product. Is it possible in this case?
+#If not, how can we solve it?
+```{r }
+m <- matrix(runif(20),4,5)
+n <- matrix(runif(8),4,2)
+m1 <- cbind(m,n)
+rbind(m,n) #doesn't work because number of columns of both matrices must correspond
+m1 <- m1[, -ncol(m1)/2]
+m1 %*% n #not possible
+m1[c(1:4)] %*% cbind(n,n)
+cbind(n,n) %*% m1
+```
+
+#Exercise 59
+#(a) Create a matrix m 5x5 containing letters by using the sample function such that an element can appear more than once.
+#Check the class of one of the elements of m.
+#(b) Add a column of numbers. Check the class of one of the new elements of m. Is there something strange about it?
+#(c) Which data structure could you use instead of the matrix? Create an appropriate data structure n
+#containing the same elements of m.
+#Then name your columns C1,...,C5 and your rows R1,...,R5 (do not use c())
+#(d) Access to an element of n in 3 different ways. Does it remind you of another data structure?
+```{r }
+m <- matrix(sample(LETTERS,25, replace = TRUE),5,5)
+class(m[1,1])
+m <- cbind(m,c(1,1,1,1,1))
+class(m[,6])
+df <- data.frame(m)
+colnames(df) <- c(paste("C", 1:6, sep=""))
+rownames(df) <- c(paste("R", 1:5, sep=""))
+df[[1]][1]
+df$C1[1]
+df[["C1"]][1]
+```
+
+#Exercise 60
+#Create a 3D array a 3x3x4 containing numbers from 1:18.
+#(a) Does recycling occur?
+#(b) Select only the first row and all but the first column. Leave the third dimension intact. Do not subscribe a.
+#(c) Copy a to a2.What happens if you set dim(a2) to NULL?
+#(d) Transform a into a matrix.
+```{r }
+a <- array(1:18, c(3,3,4))
+a1 <- a[,-1,]
+a2 <- a
+dim(a2) <- NULL
+a3 <- cbind(a1[,,1], a1[,,2], a1[,,3], a1[,,4])
+
+
+```
+
+#Exercise 61
+#Analyze the trees dataset.
+#(a)Report its class,summary,structure,dimensions,size in bit,colnames and rownames.
+#(b) What does R return if you type length(trees)?
+#(c)Show the last 7 rows.
+#(d) What is the frequency of the different values of Height? Round your result.
+```{r }
+View(trees)
+class(trees)
+summary(trees)
+structure(trees)
+dim(trees)
+object.size(trees) 
+colnames(trees)
+rownames(trees)
+#(b) What does R return if you type length(trees)?
+length(trees) #returns 3
+tail(trees, 7)
+table(trees$Height) #for every value return how many elements correspond to that value.
+
+```
+
+#Exercise 62
+#Consider the following matrix 
+m<-matrix(sample(-20:20,50,replace=T),nrow=5)
+#(a) Check if it contains any 0.
+#(b) Check if it contains all positive integers
+#(c) Which elements are greater than 15? How many are them?
+```{r }
+m<-matrix(sample(-20:20,50,replace=T),nrow=5)
+any(m[,] == 0)
+all(m[,] > 0)
+m[which(m[,] > 15)] # which return a vector
+length(m[which(m[,] > 15)])
+```
+
+#Exercise 63
+#Replace each negative element of m with the corresponding positive one. Replace positive elements
+#with their cube.Use control structures.
+```{r }
+for(i in nrow(m)){
+  for(j in ncol(m)){
+    if(m[i,j] < 0){
+       m[i,j] = -(m[i,j])
+    }else if (m[i,j] > 0){
+        m[i,j]^3
+    }else{
+      
+    }
+  }
+}
+```
+
+#Exercise 64
+#Build a cycle where each time you sample a new integer between -20 and 30.
+#Whenever you encounter an even number (not 0), print the square of the sum of all even numbers sampled until
+#that moment.
+#When 0 is sampled, exit from the cycle.
+```{r }
+s <- 0
+f <- -1
+
+while(f != 0){
+  f <- sample(-20:30,1)
+  if(f%%2 == 0 & f != 0){
+    s <- (s + f)
+    print(sum(s))^2
+  }else if( f == 0){
+    break;
+  }else{
+    
+  }
+}
+```
+
+#Exercise 65
+#Define a function f that given a numeric vector, returns its maximum, minimum, median and mean value.
+#Put these values in a vector, and return NULL if the input is not numeric. Test the function.
+```{r }
+f <- function(v){
+  if(class(v) == "numeric"){
+    return(c(min(v), max(v), mean(v), median(v)))
+  }else{
+    return(NULL)
+  }
+}
+
+f(c(1,2,3,4))
+```
+
+#Exercise 66
+#Define a function euclidean_dist that given a matrix return the euclidean distance between its rows Do not use
+#the dist function. Test the function(compare it with dist).
+```{r }
+euclidean_dist <- function(ma){
+  n = nrow(ma)
+  edmat = matrix(0, nrow = n, ncol = n)
+  for(i in (1:n)){
+    for(j in (1:n)){
+      edmat[i,j] = sqrt(sum(ma[i,],ma[,j])^2)
+    }
+  }
+  edmat
+}
+
+```
+
+#Exercise 67
+#Define a function fact that given a number returns its factorial. Try not to use for loops
+```{r }
+fact <- function(x){
+  factorial(x)
+}
+
+```
+
+#Exercise 68
+#Define a function that given a character vector, returns the frequency of the characters.
+#HINT: Use the function strsplit to split the string.
+#Test it with the following: AAAACCGGTCGACGGGACGG
+```{r }
+freq <- function(v){
+  if(class(v) == "character"){
+      table(strsplit(v,""))
+  }
+}
+freq("AAAACCGGTCGACGGGACGG")
+```
+
+#Exercise 69
+#Define a function with a variable number of input numeric arguments (minimum two) that does the following:
+#(((a+b)*c)+d)*e and so on. Example: if the input is 4,5,6,7 what we want is ((4+5)*6)+7=61
+#Test it using also length 1 vectors.
+```{r }
+my_function <- function(...){
+  args <- list(...)
+  first <- TRUE
+  plus <- TRUE
+  s <- 0
+  if(length(args) < 2){
+    print("Number of arguments not enough!")
+    
+  }else{
+  for(v in 1:length(args))
+    for(e in args[[v]]){
+       if(first == TRUE){
+        s <- e
+        first <- FALSE
+      }else if (plus == TRUE){
+        s <- (s + e)
+        plus <- FALSE
+      }else{
+        s <- (s * e)
+        plus <- TRUE
+      }
+    }
+    
+  return(s)
+  }
+}
+my_function(4,5,6,7)
+```
+
+#Exercise 70
+#Consider the dataset esoph, which contains data from a case-control study of esophageal cancer in France.
+#Analyze the dataset (how many features, how many samples, the size of the dataset).
+#Provide a summary of it.
+#Then
+#(a) See how many people are there per each age group
+#(b) Find the classes of each feature
+#(c) Compute how many controls are in each age group 
+#(d) Find how many unique vals exist per each feature. Do it in a single command
+```{r }
+nrow(esoph) #feature
+nop <- sum(esoph$ncontrols, esoph$ncases) #samples 1175
+dim(esoph)
+by(esoph[,4:5], esoph$agegp, sum)
+sapply(esoph,class)
+tapply(esoph$ncontrols, esoph$agegp, sum)
+sapply(sapply(esoph,unique), length)
+```
+
+#Exercise 71
+#What is the difference between using vapply, sapply and lapply?
+#When do sapply and lapply return the result in the same format?
+```{r }
+#apply() is the base function. It can be applied on matrix or 2 dim array only.
+#lapply() can be applied on each element of a list. It also returns a list.
+#sapply() is a wrapper function of lapply(). It stores the output in most simplified type.
+# vapply() contains an extra argument FUN.VALUE where you can specify the type and length of the output that should be returned each time your applied function is called. 
+```
+
+#Exercise 72
+#Consider the dataset state.x77, which contains statistics about the US. Consider also state.region,
+#which indicates the location of each state.
+#(a) Find the population for those states with an area greater than 100000 square miles(Single command).
+#(b) Compute the mean of life Expectancy for each region(Northeast,South,North,Central,West)
+```{r }
+View(state.x77)
+population <- state.x77[,1][which(state.area > 100000)]
+tapply(state.x77[,4], state.region, mean)
+```
+
+#Exercise 73
+#Make sure that that salary.txt is in your working directory.
+#(a)Then execute the command below. What can you say about the first row of your file? How would you solve it?
+sal<-read.table("salary.txt")
+#(b) Select only those rows for which the degree is "doctorate" and put them into a new file called "doc_salary.txt".
+#Remove the dg column. When writing the data to your file, specify new column names(sex,rank,year,year_since_deg,salary). 
+#Use write.table.
+#(c)Consider your doc_salary.txt file. Skip the first 5 lines and read only the first 10 among the remaining 
+#ones. Use read.csv.
+```{r }
+file.exists("salary.txt")
+sal<-read.table("salary.txt")
+colnames(sal) <- sal[1,]
+sal <- sal[-1,]
+sal1 <- sal[which(sal$dg == 'doctorate'), ]
+write.table(sal1, file = 'doc_salary.txt', quote = FALSE, col.names = TRUE)
+d_sal <- read.csv('doc_salary.txt', sep = ' ', header = FALSE, col.names = c('sex','rank','year','year_since_deg','salary'))
+```
+
+#Exercise 74
+#Use the command sample to generate a vector x of 20 random numbers between 1 and 20. Do it using the fewest number
+#of parameters.
+#What can you say about the frequency of the numbers in x?
+#Now create a vector y of 20 random numbers between 1 and 20 but with the parameter replace to TRUE.
+#What is the difference between y and x?
+```{r }
+x <- sample(1:20)
+y <- sample(1:20, replace = TRUE)
+#In y there are some values repeated
+```
+
+#Exercise 75
+#Generate using two different R functions, 100 random and independent events which result can be either success
+#or failure, knowing that in 85% of cases you will fail. Encode,if needed, 0 as failure and 1 as success.
+#Then verify the proportion of successes and compare it with the expected probability. Is it different?
+```{r }
+flips <- sample(c(0,1), 100, replace = TRUE, prob = c(0.85,0.15))
+flis2 <- rbinom(n = 100, size = 1, prob = 0.15) #100 obs of size 1 with probability of success of 0.15
+sum(flips) / (length(flips)* 100)
+sum(flis2)
+#there is no difference
+```
+
+#Exercise 76
+#(a)Generate a vector x of 100 random numbers extracted from a normal distribution with 0 mean and 1 sd.
+#Using the function hist() plot the vector. Give a name to your plot.
+#(b) Using the same command, generate a vector y of 1000 numbers, but with mean 10 and 30 sd.
+#Plot the histogram and compare it with the one you've obtained before.
+#(c) Compute the mean, standard deviation and variance of y and compare them with the theoretical values
+#(look at the parameters of your command). Are they completely equal?
+```{r }
+x <- rnorm(100)
+hist(x, main = "Random Plot")
+y <- rnorm(1000,10,30)
+hist(y)
+mean(y)
+sd(y)
+var(y)
+```
+
+#Exercise 77
+#Find the number of hours that are missing from December 25,2017. Use opportune data formats. 
+#Find the weekday of December 25,2017 as well.
+```{r }
+x <- c(ISOdate(2020,11,09), ISOdate(2017,12,25))
+difftime(x[1], x[2], units = 'hours')
+
+weekdays(as.Date("2017-12-25"))
+```
+
+#Exercise 78
+#Consider the setosa objects of the iris dataset.
+#Make a plot with the sepal.width on the x axis, and the sepal.length on the y axis. 
+#Color your points dark green, and change their shape to crosses (hint:use the help)
+#Assign a title to your plot and your axis.
+```{r }
+setosa <- iris[iris$Species == 'setosa',]
+plot(x = setosa$Sepal.Width, y = setosa$Sepal.Length, main = 'Setosa_Sepal', xlab = 'sepal_width', ylab = 'sepal_length', col = 'dark green', pch = 4)
+```
