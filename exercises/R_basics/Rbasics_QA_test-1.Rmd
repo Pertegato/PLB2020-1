@@ -1,0 +1,250 @@
+---
+title: "Rbasics_Q&A_test"
+author: "Simone Avesani, Manuel Tognon"
+date: "11/19/2020"
+output: html_document
+---
+
+---
+title: "Prova_ItinereR"
+output: html_document
+---
+
+
+## EX 1
+Which is the difference between sapply and lapply?
+
+a) sapply returns a vector of results, while lapply returns a list of results
+b) sapply returns a list of results, while lapply returns a vector of results
+c) sapply takes a vector as input, while lapply takes a list as input
+d) lapply can be used only on a data.frame objects, while sapply only on vectors
+e) there is no difference
+
+Answer: a 
+## EX 2
+
+Which is the difference between array and matrix?
+
+a) there is no difference
+b) a matrix is a 2D vector, while an array is a 1D vector
+c) a matrix is a 2D object, while an array is a multidimensional object
+d) a matrix is a multidimensional object, while an array is a 1D object
+e) arrays do not exist in R
+
+Answer: c
+## EX 3
+
+What is the output of dim(v) where v is a vector of length 5?
+
+a) 0
+b) 1
+c) 5
+d) 1 5
+e) NULL
+
+Answer:e
+## EX 4 
+
+When would you use ellipsis in a function signature?
+
+a) if the function does not take any argument
+b) if you want to pass an indeterminate number of arguments to the function
+c) if you want to pass only one indeterminate argument to the function
+d) if you want to pass a maximum of three inderminate arguments to the function
+e) if the function function accepts only lists as argument
+
+Answer: b
+
+## EX 5
+
+Which is the aim of negative indexing in R (imagine to apply it on a vector v)?
+
+a) to remove one element from the vector
+b) to remove one or more element from the vector
+c) to take the element in ith position starting from the end of the vector
+d) to add one or more elements to a vector
+e) to subset the vector starting form the end to its ith position
+
+Answer: b
+## EX 6
+
+Consider iris dataset. Create a data.frame df containing only data related to setosa and virginica species. 
+Do it in just one line of code.
+```{r}
+df<- data.frame(iris[(iris$Species !="versicolor" ),(1:5)])
+
+```
+
+## EX 7 
+
+Consider the iris dataset. Subset iris dataset to obtain data related only to setosa specie and store the 
+result in df. Then, take the first two rows of df and write them in an appropriate file. 
+```{r}
+df<- data.frame(iris[(iris$Species =="setosa" ),(1:5)])
+setosa<- head(df,2)
+write.table(setosa, file = 'doc_setosa.txt', quote = FALSE, col.names = TRUE)
+```
+
+## EX 8
+
+Consider the string "HelloWorld". Turn it in "H_e_l_l_o_W_o_r_l_d". (Hint: use strsplit() function)
+```{r}
+s<- c("H","e","l","l","o","W","o","r","l","d")
+s1<-strsplit(s, split= "", fixed = TRUE)
+s2<- paste(s1, collapse = "_")
+s2
+ 
+
+```
+
+## EX 9
+
+Consider the quakes dataset, which stores earthquake locations of Fiji islands since 1964.
+Print the average earthquake depth by Richter magnitude.
+```{r}
+
+tapply(quakes$depth, quakes$mag, mean)
+
+```
+
+## EX 10
+
+Write a function that takes an arbitrary number of numbers as strings (e.g. "1", "2", "3") and returns 
+their sum. (Hint: use as.double())
+```{r}
+f<- function(...){
+  args<- as.double(...)
+  s<- 0
+  for(i in 1:length(args))
+    s<- s+args[i]
+    
+return (s)
+         }
+j<- c("1","2","4","7")
+f(j)
+```
+
+## EX 11
+
+Define a binary operator that computes the sum of the square root of the means of two vectors. Use the 
+following vectors:
+```{r}
+v1 <- c(25, 11, 34, 2, 17, 5)
+v2 <- c(32, 16, 90, 45, 26 , 15, 3, 7)
+(sqrt(sum(v1) / length(v1))) + (sqrt(sum(v2) / length(v2)))
+```
+
+## EX 12
+
+Transform the given list l into a data.frame object. If the columns of the resulting data.frame have 
+different lengths, fill them with NA.
+```{r}
+l <- list(
+  A = c(1:10), 
+  name= c("Luca", "Enza", "Mario", "Paola", "Martina"), 
+  B = c(rep("treated", 5), rep("untreated",5)), 
+  drug = c(rep("aspirin",5))
+  )
+d1<-as.data.frame.list(l)
+max.length <- max(sapply(l, length))
+d1 <- lapply(l, function(v) { c(v, rep(NA, max.length-length(v)))})
+do.call(rbind, d1)
+d1
+
+```
+
+## EX 13  
+
+Consider the given data.frame df. Define a function which computes the mean of each column of a data.frame. 
+Replace the NA values contained in df with the string "not available"; write a function to do it. 
+Finally, create a list containing the modified data.frame and the means you got. Rename the list elements 
+appropriately.
+```{r}
+df <- data.frame(
+  col1 = c(runif(10)),
+  col2 = sample(c(1:6, NA), size = 10, replace = TRUE),
+  col3 = c(rnorm(5), rep(NA, 5)),
+  col4 = c(rep(c(sample(0:5, replace = T, size = 1), NA), 5))
+  )
+mean_fun<-function(x){
+    mean_c = numeric(0)
+    for( i in 1:ncol(x)){
+        s = sum(x[,i], na.rm=TRUE)
+        l = length(x[,i][is.na(x[,i]) == FALSE])
+        mean_c[i] = s/l
+    }
+    return (mean_c)
+    na_value(df)
+}
+mea<-mean_fun(df)
+
+na_value<-function(x){
+  for( i in 1:nrow(x)){
+    for(j in 1:ncol(x)){
+      if (is.na(x[[i,j]])){
+      
+      x[[i,j]]= "not avaiable"  
+      } 
+    }
+    }
+ 
+        
+   return(x)  
+    
+}
+not<-na_value(df)
+
+lis<- list(mea,not) 
+names(lis) <- c("mean", "not_av_df")
+lis
+```
+
+## EX 14
+
+Create two matrices of dimensions 2x3 and 4x2. Fill them with random values. Then, concatenate them by row. 
+Rename the columns using the letters (use R variable LETTERS) in even position and rename the rows using the 
+letters in odd position.Plot the values contained in the first column against those in the second column. 
+(Hint: use runif(), LETTERS and plot())
+```{r}
+m1<-matrix(runif(6), 2, 3)
+m2<-matrix(runif(8), 4, 2)
+mx<-merge(m1,m2, all=TRUE)
+colnames(mx) <- LETTERS[seq(2, by=2, 6)]
+rownames(mx) <- LETTERS[seq(1, by=2, 12)]
+plot(mx[,1], mx[,2])
+
+```
+
+## EX 15 
+
+Consider the two data.frames df1 and df2. Extract the columns of df1 and df2 which share the same colnames. 
+Then, create a new data.frame called df3, containing the extracted columns concatenated by row. 
+Use function rbinom() to create a binomial distribution, using data contained in df3 (prob, observations, 
+size). Finally, print how many times each value has been sampled by rbinom().
+(Hint: use intersect(), check the help for rbinom() and sum df3$size)
+
+```{r}
+df1 <- data.frame(
+  sample.1 = sample(LETTERS, size = 10, replace = TRUE),
+  size = c(rep(1, 5)),
+  sample.2 = sample(1:10, size = 10, replace = TRUE),
+  prob = c(0.1, 0.05, 0.2, 0.05, 0.1),
+  observations = c(3, 7, 2, 4, 5)
+  )
+
+df2 <- data.frame(
+  prob = c(0.05, 0.1, 0.1, 0.05, 0.2),
+  observations = c(3, 4, 6, 5, 8),
+  sample.2 = sample(1:10, replace = TRUE, size = 10),
+  sample.1 = sample(LETTERS, size = 10, replace = TRUE),
+  size = c(rep(1, 5))
+  )
+colnames(df3)<-intersect(colnames(df1),colnames(df2))
+df3<- data.frame(rbind.data.frame(df1,df2))
+             
+```
+
+## BONUS EX
+
+Consider the data.frame created during the exercise 12. Write a function to exchange the columns in even 
+position with the rows in odd position and vice-versa. Change also rownames and colnames accordingly.
