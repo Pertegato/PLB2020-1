@@ -1,0 +1,193 @@
+---
+title: "Bash_Q&A_test.Rmd"
+output: html_notebook
+author: "Manuel Tognon, Simone Avesani"
+---
+  
+## EX1
+  
+Assume that you are given a TSV file with 10 rows and 6 columns. The following command
+```{bash}
+cat "myFile.tsv"| head -n 5 | cut -f 6 | tail -n 4 
+```
+a) returns an error
+b) prints the last 4 rows of the file
+c) prints the first 4 rows of the file
+d) prints the last 4 values of the sixth column
+e) prints the second the third, the fourth and the fifth values of the sixth column
+```{r}
+e
+```
+
+## EX2
+Assume that you are given a GFF file and assume that you want to extract the rows with data related to 
+chromosome 1, for example.
+Which bash command would you use?
+  
+a) grep
+b) tar -xzf
+c) cat
+d) find
+e) cut -f2 | grep 
+```{r}
+a
+```
+
+## EX3
+
+Assume you are given a TSV file with 5 columns and 100 rows. Note that the first column contains the row 
+indexes.
+What the following command does, when applied to our file? 
+```{bash}
+sort -rk4
+```
+a) sort the rows in asceding order according to value in column 3
+b) sort the rows in descending order according to value in column 3 
+c) sort only the values in column 3 in descending order
+d) print only the third column 
+e) sort all the files containined in the directory containing the number 3 in the name in descending order
+```{r}
+b
+```
+
+## EX4
+
+When writing values to a file, in Bash, which is the difference between `>` and `>>`?
+  
+a) there is not difference
+b) > append the stdoutput at the end of the file, >> write on the std error
+c) > append the stdoutput at the end of the file, >> redirect the std output to the file deleting the current 
+   file content
+d) > redirect the std output on the file deleting the current content, >> redirect the file content to the 
+   standard input
+e) > redirect the std output to the file deleting the current file content, >> append the stdoutput at the end
+   of the file
+```{r}
+e
+```
+
+## EX5
+
+Consider the TSV file `my_dataset.tsv`. 
+Create a new file called `my_dataset_new.tsv` containing only the Sepal.Length, Sepal.Width and Species 
+columns realted to "setosa" specie. Sort values in descending order by Sepal.Length. (Bonus: include the 
+column names in the resulting TSV file).
+
+```{bash}
+filename="my_dataset.tsv"
+cut -f 1,2,5 | awk = 'setosa' | sort -rk1 > $filename
+#awk -f $filename c1=Sepal.Length c2=Sepal.Width c3=Type
+head -n 1- $filename #or : awk 'NR==1 {print; exit}' $filename
+mv $filename my_dataset.tsv
+
+K=$(printf '\t')
+k1="Sepal.Length"
+k2="Sepal.Width"
+k3="Species"
+echo "$k1$K$k2$K$k3" > my_dataset_new.tsv
+grep "setosa" my_dataset.tsv | cut -f 1,2,5 | sort -rk1 >> my_dataset_new.tsv
+
+head -n 1 my_dataset.tsv | cut -f 1,2,5 > my_dataset_new.tsv
+grep "setosa" my_dataset.tsv | cut -1,2,5 | sort -rk1 >> my_dataset_new.tsv
+```
+
+## EX6
+
+Create a new directory called `my_dir` and rename it as `my_dir2`. Create inside `my_dir2` a TXT file called 
+`my_file.txt`. Write in `my_file.txt` a numeric sequence from 1 to 10.
+```{bash}
+mkdir my_dir
+mv my_dir my_dir2
+touch my_file.txt
+seq= seq 1 10
+echo "$seq"> my_dir2/my_file.txt
+
+```
+
+## EX7
+
+Consider the GFF file `grafimo_out.gff`. Create a file named `grafimo_out_fwd.gff` containing only data 
+related to forward DNA strand ('+') and a file named `grafimo_out_rev.gff`, containing only data related to
+the reverse strand ('-'). Include the GFF header in the output files. (Hint: the strand information are in 
+the 7th column and type `man awk` on terminal).
+```{bash}
+filename="grafimo_out.gff"
+filenamea="grafimo_out_fwd.gff"
+filenameb="grafimo_out_rev.gff"
+head -n 1 $filename > $filenamea
+head -n 1 $filename > $filenameb
+cat $filename | awk '/\+/ {print}' >> $filenamea
+cat $filename | awk '/\t-\t/ {print}' >> $filenameb #\t =between columns
+
+filename="grafimo_out.gff"
+filenamea="grafimo_out_fwd.gff"
+filenameb="grafimo_out_rev.gff"
+head -n 1 $filename > $filenamea
+head -n 1 $filename > $filenameb
+cat $filename | sort -k7 | '/\+/ {print}' >> $filenamea
+cat $filename | sort -k7 | awk '/\t-\t/ {print}' >> $filenameb 
+
+```
+
+## EX8 
+Create a functions that, read a GFF file, prints the total number of features contained in the file, a 
+function that prints the number of features belonging to the forward strand ('+') and one which prints those
+belonging to reverse strand ('-'), a funtion that prints the number of features by chromosome and a funtion 
+which computes the average score by chromosome. Consider `grafimo_out.gff` as input file. (Hint: the score is
+in the 6th column, while the strand is in the 7th column).
+
+```{bash}
+num_features grafimo_out.gff
+num_frwrd_strnd grafimo_out.gff
+num_rvrs_strnd grafimo_out.gff
+num_chr grafimo_out.gff
+score grafimo_out.gff
+
+function num_features {
+num_features = 'grep -v -P "^#" $1 | cut -f 3 | sort | uniq -c '
+#not consider the first line  with #, select the rd column, sort and cosider uniq features
+echo "Number of features: $num_features"
+}
+
+function num_frwrd_strnd {
+num_frwrd = 'cat $1 | awk '/\+/ {print}' | cut -f 3 | sort | uniq -c'
+echo "Number of features belonging to forward  strand ('+'): $num_frwrd"
+}
+
+function num_rvrs_strnd {
+num_rvrs = 'cat $1 | awk '/\t-\t/ {print}' | cut -f 3 | sort | uniq -c'
+echo "Number of features belonging to reverse strand ('-'): $num_rvrs"
+}
+
+function num_chr {
+tmp='mktemp' 
+tmp = 'cut -f 1 | sort | uniq -c'
+while lines line 
+  comparisons = 'grep "^$line" $1 | cut -f 3 | sort | uniq -c'
+  #comparisons between chromosomes in the 3rd column, sorting and considering uniq features 
+  echo $line
+  echo comparisons
+}
+
+function score {
+tmp='mktemp'
+grep -v -P "^#" $1 | cut -f1 | sort | uniq > $tmp
+echo "5-Score"
+while read line # to scan the original file and consider chromosome by chromosome
+  do  
+    chr=$line
+    tot4='grep "^$line" $1 | cut -f6 ' #grep  -v -P "^#" $1
+    tot_score=0
+    n=0
+    for 1 in $tot4  #to scan the list of tot4
+    do 
+      tot_score='echo "(($tot_score * $n) + $1 ) / ($n + 1.0)" | bc -1'
+      ((n=n+1))
+    done
+    echo "$chr $tot_score"
+  done < $tmp
+  rm $tmp
+    
+}
+```
+
