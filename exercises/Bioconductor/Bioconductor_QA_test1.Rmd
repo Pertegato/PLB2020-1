@@ -1,0 +1,323 @@
+---
+title: "Bioconductor_Q&A_test"
+author: "Simone Avesani, Manuel Tognon"
+date: "12/10/2020"
+output: html_document
+---
+```{r, include=TRUE}
+library(IRanges)
+library(GenomicRanges)
+library(Biostrings)
+```
+
+# EX1
+
+What is a normal IRanges?
+
+a) is an IRanges with values normalized between 0 and 1
+b) is a minimal representation of the IRanges viewed as a set X
+c) is a minimal representation of the IRanges viewed as an array
+d) is a set with as much ranges from the original IRanges object as possible
+e) is an array with as much ranges from the original IRanges object as possible
+```{r}
+b
+```
+
+# EX2
+
+What is an Hits object obtained after finding the overlaps between two IRanges?
+
+a) it is a DataFrame which describes the relationship between two IRanges
+b) it is a vector containing the overlapping positions
+c) it is an array containing the overlapping positions
+d) it is a matrix which describes the relationship between two IRanges
+e) it is a matrix which describes the position in the genome overlapping an IRanges
+```{r}
+d
+```
+
+# EX3
+
+Which kind of strings can be represented using a BioStrings object?
+
+a) only DNA
+b) RNA and DNA
+c) DNA and aminocidic sequences
+d) RNA and aminoacidics sequences
+e) DNA, RNA and aminoacidics sequences
+```{r}
+e
+```
+
+# EX4
+
+What is a consensus matrix?
+
+a) a DataFrame containing the translated DNA codons
+b) an array containing the letter probabilty at each position
+c) a matrix containing  the letter probability at each position
+d) a DataFrame containing the letter probability at each position
+e) a matrix containing the translated DNA codons
+```{r}
+c
+```
+
+# EX5
+
+Which is the resulting object calling coverage() on a GRanges?
+
+a) a named Rle List object with one coverage vector per seqlevel of the GRanges
+b) the sequencing depth per ranges in the GRanges
+c) a coverage vector between all the sequences
+d) a named List object with one coverage vector per seqlvel of the Granges
+e) coverage() works on Biostrings and not on GRanges
+```{r}
+a
+```
+
+# EX6
+
+Create two IRanges objects ir1 and ir2 with random start and end positions (in the range 1:100 and make 
+sure that start < end). Then, resize ir1 to a width of 10. Find the overlaps between ir1 and ir2. (Hint: use
+sample())
+
+```{r}
+start1<-c(sample(1:99,3))
+end1<-c(sample(start1[1]:100, 1), sample(start1[2]:100, 1), sample(start1[3]:100, 1))
+start2<-c(sample(1:99,3))
+end2<-c(sample(start2[1]:100, 1), sample(start2[2]:100, 1), sample(start2[3]:100, 1))
+
+#Define objects
+ir1<-IRanges(start = start1, end = end1)
+ir2<-IRanges(start = start2, end = end2)
+
+#Resize ir1 to a width of 10 + overlap between ir1 and ir2 
+width(ir1)<-10
+ir1
+findOverlaps(ir1, ir2)
+```
+
+# EX7
+
+Given the following lines of code, comment what it is happening step by step.
+```{r}
+#Declaration of the function plotRanges with all the parameters it needs, there are 5 parameters always needed and then the ellipsis function, it means that the function plotRanges can take also various other parameters.
+#Note that col and sep parameters have default values (col="black",sep=0.5). 
+#Moreover, the function substitute returns the parse tree for the un-evaluated expression x, it could be any syntactically valid R expression. The function deparse turns un-evalued expression into character strings 
+plotRanges <- function(x, xlim=x, main=deparse(substitute(x)),
+                       col="black",sep=0.5,...){
+  #Set variable height equal to 1 
+  height <-1
+  
+  #Check if xlim belongs to Ranges class, xlim is setted as x, that is the Range object passed in the function call
+  if(is(xlim, "Ranges"))
+    #if xlim belongs to Ranges class, then re-set it as a vector of two values, the first is the minimum starting position, the second is the maximum value between end positions  
+    xlim<-c(min(start(xlim)),max(end(xlim)))
+  #IRanges creates ranges with the start positions of x and the end positions of x but incremented by 1 
+  #This IRanges object is used by the function disjointBins to segregate x into a set of bins so that the ranges in each bin are disjoint -> the result is a vector of integers indicating the bin index for each range.
+   bins<- disjointBins(IRanges(start(x), end(x)+1))
+  #It creates a new graphics frame 
+  plot.new()
+  #Function that set up the coordinates system for the graphics window. It takes 2 parameters:
+  #xlim is a vector of two elements giving the x coordinate ranges.
+  #c() 
+  plot.window(xlim, c(0, max(bins)*(height+sep)))
+  ybottom <- bins*(sep+height) -height
+  #Rect is a function that draws a rectangle with the given coordinates, the parameters are:
+  #xleft -> where the x axis starts
+  #ybottom -> where the y axis starts
+  #xright -> when x axis finishes 
+  #ytop -> where the y axis finishes 
+  #col specifies the color(s) to fill or shade the rectangle with. 
+  rect(start(x)-0.5, ybottom, end(x)+0.5, ybottom+height, col=col,...)
+  #Function that add the title to the plot
+  title(main)
+  #The function axis adds an axis to the current plot, allowing the specification of the side, position, labels etc. etc. The passed number 1 means that the axis is placed below. 
+  axis(1)
+}
+
+#Function to set graphical parameters, in this case the parameter nfrow is setted as a vector of two elements. 
+par(mfrow = c(2,1))
+
+#Function calls
+ir <- IRanges(start= c(1,3,7,9), end=c(4,4,8,10))
+plotRanges(ir)
+ir1 <- reduce(ir)
+plotRanges(ir1) 
+ir2 <- disjoin(ir)
+plotRanges(ir2)
+```
+
+# EX8
+
+Create a GRanges object gr with random start and end positions (in range 1:100), chromosome and strand 
+information.  Then, count how many ranges fall in the forward strand and how many ranges have a width less 
+than 10. (Hint: use sample())
+```{r}
+start<-c(sample(1:99, 4))
+end<-c(sample(start[1]:100, 1), sample(start[2]:100, 1), sample(start[3]:100, 1), sample(start[4]:100, 1))
+
+gr<-GRanges(seqnames = c(rep("chr1", 2), rep("chr2", 2)), ranges = IRanges(start = start, end = end), 
+            strand=c(rep("+",2), rep("-",2)))
+gr
+
+#Ranges in the forward strand
+length(gr[strand(gr)=="+"])
+
+#Width less then 10
+length(gr[width(gr)<10])
+```
+
+# EX9
+
+Given a DNA string s in IUPAC CODE MAP, transform it in the simple DNA alphabet (A, C, G, T). Then, compute 
+the reverse complement and translate it into the corresponding aminoacidic sequence. (Hint: use 
+IUPAC_CODE_MAP)
+```{r}
+s <- "NTRKWSD"
+s<-strsplit(s, split="")  #Now s is a list, so use [[]] to access its elements 
+x<-IUPAC_CODE_MAP[s[[1]] ]  #Subset the named vector by names to take only the elements I want. 
+x<-paste(x, collapse = "")   #Translated version
+x
+reverseComplement(DNAString(x))
+translate(DNAString(x))
+```
+
+# EX10
+
+Given the GRanges gr1 and gr2, sort gr1 by seqlevel and select only certain ranges from gr1 which overlap 
+with gr2.
+```{r}
+gr1 <- GRanges(seqnames = c("chr11", "chr5", "chr3"), IRanges(c(4, 10, 25), c(18, 15, 32)), 
+                           strand=c("-", "+", "+"))
+gr2 <- GRanges(seqnames = c("chr11", "chr5", "chr3"), IRanges(c(7, 16, 29), c(21, 31, 31)), 
+                           strand=c("-", "+", "+"))
+#Sort
+seqlevels(gr1)<-c("chr3", "chr5", "chr11")
+sort(gr1)
+
+#certain ranges
+subsetByOverlaps(gr1,gr2)
+
+```
+
+# EX11
+
+Create a random DNAString of length 100 using IUPAC symbols. Compute the reverse complement of the string and
+translate it in the corresponding aminoacidic sequence. Count how many times the pattern "KR" appears in the 
+aminoacidic sequence. 
+```{r}
+string<-names(IUPAC_CODE_MAP[sample(1:15, 100, replace = TRUE)])  #I want to select the names of vector
+string<-paste(string, collapse = "")
+stringDNA<-DNAString(string)
+stringDNA
+
+#Reverse complement + translate 
+reverseComplement(stringDNA)
+
+ #Before use translate function, you should have a string formed only by A, C, G, T 
+y<-strsplit(as.character(stringDNA), split="") #Split the string, to obtain the names I need to subset the vector IUPAC_CODE_MAP 
+stringt<-IUPAC_CODE_MAP[y[[1]] ]  #Subset the named vector by names to take only the element I want. 
+stringt<-paste(stringt, collapse = "")   #Translated version
+stringt
+t<-translate(DNAString(stringt)) 
+t
+
+#Count KR
+letterFrequency(t, "KR")
+```
+
+# EX12
+
+Given an IRanges ir, get the flanking ranges of width 10, both on the right and on the left. Create a GRanges
+gr from ir and shift it on the right by 7 positions. Then, resize it to a width of 15 with the range end fixed.
+```{r}
+ir <- IRanges(start = c(1, 8, 4, 10), width = c(34, 41, 98, 62), 
+              names = c(paste("seq", 1:4, sep="")))
+#Flanking region
+flank(ir, 10, start = TRUE)
+flank(ir, 10, start = FALSE)
+
+#Create the GRange object 
+gr<-GRanges(seqnames = c("chr1"),ranges = ir)
+gr
+#Shift + resize
+shift(gr, 7)
+resize(gr, 15, fix = "end")
+```
+
+# EX13
+
+Given two IRanges objects ir1 and ir2 find the overlaps between them. Comment the result. Then, create 
+another IRanges object named ir3 containing the overlapping range between the first query and the first 
+subject.
+
+The result of the findOverlap function is a description of the relation between the two ranges; therefore, a Hits object, that is a two-column matrix; columns are named subjectHits and queryHits. In subjectHits there are the indices of the ranges of the first object, ir1, having an overlap with some ranges in the second objcet, ir2, whose indices are contained in queryHits column. 
+```{r}
+ir1 <- IRanges(start = c(1, 8, 4, 10), width = c(34, 41, 98, 62), 
+              names = c(paste("seq", 1:4, sep="")))
+ir2 <- IRanges(start = c(30, -48, 99, 50), width = c(76, 7, 116, 67), 
+              names = c(paste("seq", 1:4, sep="")))
+
+#Overlaps
+ov<-findOverlaps(ir1, ir2)
+ov
+
+#Overlapping region 
+ir3<-IRanges(intersect(ir2[subjectHits(ov)[1]], ir1[queryHits(ov)[1]]))
+ir3
+```
+
+# EX14
+
+Create four random DNAStrings using IUPAC symbols. Store them in a DNAStringSet object. Then, get the letter frequency. How many codons can be obtained from the strings in the DNAStringSet?
+```{r}
+
+#Create four random strings 
+set<-DNAStringSet()
+for (i in 1:4) {
+  string<-names(IUPAC_CODE_MAP[sample(1:15, 50, replace = TRUE)])
+  string<-paste(string, collapse = "")
+  set<-DNAStringSet(c(set, string))
+}
+set
+
+#Letter frequency 
+consensusMatrix(set)
+
+#Count codons for sequences of different lengths
+for (i in 1:4) {
+  print(as.integer(length(set[[i]])/3))
+}
+
+#My sequences have all the same length, so we can take the length of only one of them
+as.integer( length( set[[1]] )/3 )
+```
+
+# EX15
+
+Given a GRanges gr, keep only ranges falling in standard chromosomes. Map the seqlevels to NCBI style names.
+Keep only data related to chromosome 11. Then add a random score (in range -10:10) to gr as metadata
+
+```{r}
+gr <- GRanges(seqnames = c("chr11", "c5hrU34", "chr5", "chr11"), IRanges(c(4, 2, 10, 25), c(18, 17, 15, 32)),
+              strand=c("-", "-", "+", "+"))
+
+#Standard chromosomes
+gr<-keepStandardChromosomes(gr, pruning.mode = "coarse")
+gr
+#Change style 
+style<-mapSeqlevels(seqlevels(gr), "NCBI")
+gr<-renameSeqlevels(gr, style)
+gr
+
+#Info chromosome 11
+gr<-gr[seqnames(gr)=="11"]
+gr
+
+#Random score
+values(gr)<-DataFrame(score=c(sample(-10:10,2)))
+gr
+```
+
+
